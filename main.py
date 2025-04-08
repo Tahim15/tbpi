@@ -1,10 +1,9 @@
 import os
-from aiohttp import web
+from aiohttp import web, ClientError
 from urllib.parse import urlparse
 from re import search
 import aiohttp
 import asyncio
-from requests.exceptions import RequestException  # Still using this for exception compatibility
 
 class DirectDownloadLinkException(Exception):
     pass
@@ -57,7 +56,7 @@ async def terabox(url, video_quality="HD Video"):
                         if resp.status == 200:
                             response_data = await resp.json()
                             break
-            except (aiohttp.ClientError, asyncio.TimeoutError):
+            except (ClientError, asyncio.TimeoutError):
                 continue
     
     if not response_data:
